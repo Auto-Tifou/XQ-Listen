@@ -5,6 +5,8 @@ import android.app.Application;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 
+import mobapplication.himalaya.utils.LogUtil;
+
 public class BaseApplication extends Application {
 
     @Override
@@ -24,5 +26,8 @@ public class BaseApplication extends Application {
             mXimalaya.setPackid("com.ximalaya.qunfeng");
             mXimalaya.init(this ,mAppSecret);
         }
+
+        //初始化LogUtil,要发布的话改为true
+        LogUtil.init(this.getPackageName(), false);
     }
 }
