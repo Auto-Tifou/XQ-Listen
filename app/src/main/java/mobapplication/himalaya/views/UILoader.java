@@ -27,7 +27,7 @@ public  abstract class UILoader extends FrameLayout {
     private View mEmptyView;
     private OnRetryClickListener mOnRetryClickListener = null;
 
-    //定义一个枚举类
+    //定义一个枚举类,各种情况
     public enum  UIStatus{
         LOADING,SUCCESS,NETWORK_ERROR,EMPTY,NONE
     }

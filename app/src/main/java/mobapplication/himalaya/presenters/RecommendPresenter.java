@@ -53,7 +53,7 @@ public class RecommendPresenter implements IRecommendPresenter {
         updateLoading();//发起请求
         Map<String, String> map = new HashMap<String, String>();
         //这个参数表示一页数据返回多少条
-        map.put(DTransferConstants.LIKE_COUNT, Constants.RECOMMAND_COUNT+"");
+        map.put(DTransferConstants.LIKE_COUNT, Constants.COUNT_RECOMMAND +"");
         CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {
@@ -89,6 +89,8 @@ public class RecommendPresenter implements IRecommendPresenter {
     private void handlerRecommendResult(List<Album> albumList) {
         //通知UI更新
         if (albumList != null) {
+//            测试,清空一下,让界面显示空
+//            albumList.clear();
             if (albumList.size() == 0) {
                 for (IRecommendViewCallback callback : mCallback) {
                     callback.onEmpty();

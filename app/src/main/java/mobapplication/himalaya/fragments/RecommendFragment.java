@@ -1,5 +1,6 @@
 package mobapplication.himalaya.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,11 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
+import mobapplication.himalaya.DetailActivity;
 import mobapplication.himalaya.R;
 import mobapplication.himalaya.adapters.RecommendListAdapter;
 import mobapplication.himalaya.interfaces.IRecommendViewCallback;
+import mobapplication.himalaya.presenters.AlbumDetailPresenter;
 import mobapplication.himalaya.presenters.RecommendPresenter;
 import mobapplication.himalaya.utils.LogUtil;
 import mobapplication.himalaya.views.UILoader;
@@ -26,7 +29,7 @@ import mobapplication.himalaya.views.UILoader;
  * 推荐- fragment
  */
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, RecommendListAdapter.OnRecommendItemClickListener {
     private static final String TAG = "RecommendFragment";
     private RecyclerView mRecommendRv;
     private View mRootView;
@@ -83,6 +86,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         //3.设置适配器
         mRecommendListAdapter = new RecommendListAdapter();
         mRecommendRv.setAdapter(mRecommendListAdapter);
+        mRecommendListAdapter.setOnRecommendItemClickListener(this);
         return mRootView;
     }
 
@@ -133,5 +137,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         if (mRecommendPresenter != null) {
             mRecommendPresenter.getRecommendList();
         }
+    }
+
+    @Override
+    public void onItemClick(int position, Album album) {
+        //根据位置拿到数据
+        AlbumDetailPresenter.getInstance().setTargetAlbum(album);
+        //item被点击了,跳转到详情页面
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        startActivity(intent);
     }
 }
