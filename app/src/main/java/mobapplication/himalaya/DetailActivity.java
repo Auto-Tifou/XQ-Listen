@@ -32,6 +32,7 @@ import mobapplication.himalaya.adapters.DetailListAdapter;
 import mobapplication.himalaya.base.BaseActivity;
 import mobapplication.himalaya.interfaces.IAlbumDetailViewCallback;
 import mobapplication.himalaya.presenters.AlbumDetailPresenter;
+import mobapplication.himalaya.presenters.PlayerPresenter;
 import mobapplication.himalaya.utils.ImageBlur;
 import mobapplication.himalaya.utils.LogUtil;
 import mobapplication.himalaya.views.RoundRectImageView;
@@ -197,8 +198,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     @Override
-    public void onItemClick() {
-        //TODO:跳转到播放界面
+    public void onItemClick(List<Track> detailData, int position) {
+        //设置播放器的数据
+        PlayerPresenter playerPresenter = PlayerPresenter.getPlayerPresenter();
+        playerPresenter.setPlayList(detailData,position);
+        //跳转到播放器页面
         Intent intent = new Intent(this,PlayerActivity.class);
         startActivity(intent);
     }

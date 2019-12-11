@@ -1,27 +1,17 @@
 package mobapplication.himalaya.interfaces;
 
+import mobapplication.himalaya.base.IBasePresenter;
+
 /**
  * 创建 by Administrator in 2019/12/6 0006
  *
  * 说明 : 减少接口冗余,MVP模式
  * @Useage :
  **/
-public interface IRecommendPresenter {
+public interface IRecommendPresenter extends IBasePresenter <IRecommendViewCallback>{
     /**
      * 获取推荐内容
      */
     void getRecommendList();
-
-    /**
-     * 注册UI的回调
-     * @param callback
-     */
-    void  registerViewCallback(IRecommendViewCallback callback);
-
-    /**
-     * 取消UI的回调注册
-     * @param callback
-     */
-    void unRegisterViewCallback(IRecommendViewCallback callback);
 
 }
