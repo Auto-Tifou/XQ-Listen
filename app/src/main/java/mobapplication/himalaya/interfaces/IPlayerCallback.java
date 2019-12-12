@@ -64,15 +64,21 @@ public interface IPlayerCallback {
      * @param currentProgress
      * @param total
      */
-    void onProgressChange(long currentProgress, long total);
+    void onProgressChange(int currentProgress, int total);
 
     /**
      * 广告正在加载
      */
-    void onAdLoadong();
+    void onAdLoading();
 
     /**
      * 广告结束
      */
     void onAdFinished();
+
+    /**
+     * 更新当前节目
+     * @param track 节目标题
+     */
+    void onTrackUpdate(Track track,int playIndex);
 }

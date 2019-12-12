@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_play_list_bg">
+
+    <LinearLayout
+        android:id="@+id/play_list_controller_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/play_list_rv"
+        android:layout_width="match_parent"
+        android:layout_height="390dp"
+        android:layout_below="@id/play_list_controller_container">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/play_list_close_Btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_below="@id/play_list_rv"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:text="关闭"/>
+</RelativeLayout>
