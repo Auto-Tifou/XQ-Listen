@@ -22,7 +22,7 @@ public interface IPlayerCallback {
     /**
      * 播放暂停
      */
-    void onPlayPayse();
+    void onPlayPause();
 
     /**
      * 播放停止
@@ -81,4 +81,10 @@ public interface IPlayerCallback {
      * @param track 节目标题
      */
     void onTrackUpdate(Track track,int playIndex);
+
+    /**
+     * 通知UI更新播放列表的顺序文字和图标
+     * @param isReverse
+     */
+    void updateListOrder(boolean isReverse);
 }

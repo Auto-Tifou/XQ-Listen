@@ -64,5 +64,16 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallback> {
      * 判断播放器是否在播放
      * @return
      */
-    boolean isPlay();
+    boolean isPlaying();
+
+    /**
+     * 把播放器列表内容翻转
+     */
+    void reversePlayList();
+
+    /**
+     * 播放专辑第一首节目
+     * @param id
+     */
+    void playByAlbumId(long id);
 }

@@ -151,7 +151,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         mControlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPlayerPresenter.isPlay()) {
+                if (mPlayerPresenter.isPlaying()) {
                     //如果现在的状态是正在播放,那就暂停
                     mPlayerPresenter.pause();
                 } else {
@@ -223,12 +223,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         mPlayModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //根据当前的mode获取到下一给mode
-                XmPlayListControl.PlayMode playMode = sPlayModeRule.get(mCurrentMode);
-                //修改播放模式
-                if (mPlayerPresenter != null) {
-                    mPlayerPresenter.switchPlayMode(playMode);
-                }
+                switchPlayMode();
             }
         });
 
@@ -258,6 +253,32 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
                 }
             }
         });
+
+        mSobPopWindow.setPlayListActionListener(new SobPopWindow.PlayListActionListener() {
+            @Override
+            public void onPlayModeClick() {
+                //切换播放模式
+                switchPlayMode();
+
+            }
+
+            @Override
+            public void onOrderClick() {
+                //点击了切换顺序和逆序
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.reversePlayList();
+                }
+            }
+        });
+    }
+
+    private void switchPlayMode() {
+        //根据当前的mode获取到下一给mode
+        XmPlayListControl.PlayMode playMode = sPlayModeRule.get(mCurrentMode);
+        //修改播放模式
+        if (mPlayerPresenter != null) {
+            mPlayerPresenter.switchPlayMode(playMode);
+        }
     }
 
     public void updateBgAlpha(float alpha){
@@ -333,7 +354,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
     }
 
     @Override
-    public void onPlayPayse() {
+    public void onPlayPause() {
         //暂停播放,UI设置回去
         if (mControlBtn != null) {
             mControlBtn.setImageResource(R.drawable.img_bofang_bf);
@@ -380,6 +401,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
     public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
         //更新播放模式并且修改UI
         mCurrentMode = playMode;
+        //更新pop里的播放模式
+        mSobPopWindow.updatePlayMode(mCurrentMode);
         updatePlayModeBtnImg();
 
 
@@ -423,6 +446,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 
     @Override
     public void onTrackUpdate(Track track, int playIndex) {
+        if (track == null) {
+            LogUtil.d(TAG,"onTrackUpdate -- > track null");
+            return;
+        }
         this.mTrackTitleText = track.getTrackTitle();
         if (mTrackTitleTv != null) {
             //设置当前节目标题
@@ -430,14 +457,20 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         }
         //当节目改变的时候,我们就获取到当前播放中播放数量
         //当前的节目改变以后,要修改页面的图片
+        //false图片切换没有自带动画,改为true则自带动画
         if (mTrackPagerView != null) {
-            mTrackPagerView.setCurrentItem(playIndex, true);
+            mTrackPagerView.setCurrentItem(playIndex, false);
         }
 
         //修改播放列表里的播放位置
         if (mSobPopWindow != null) {
             mSobPopWindow.setCurrentPlayPosition(playIndex);
         }
+    }
+
+    @Override
+    public void updateListOrder(boolean isReverse) {
+        mSobPopWindow.updateOrderIcon(isReverse);
     }
 
     //滑动

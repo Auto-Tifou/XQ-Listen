@@ -18,8 +18,9 @@ import mobapplication.himalaya.R;
 
 /**
  * 创建 by Administrator in 2019/12/11 0011
- *
+ * <p>
  * 说明 : 详情播放页面的图片adapter
+ *
  * @Useage :
  **/
 public class PlayerTrackPagerAdapter extends PagerAdapter {
@@ -37,8 +38,14 @@ public class PlayerTrackPagerAdapter extends PagerAdapter {
         //设置内容图片
         Track track = mData.get(position);
         String coverUrlLarge = track.getCoverUrlLarge();
+
         //加载图片
-        Picasso.with(container.getContext()).load(coverUrlLarge).into(item);
+        if (coverUrlLarge.trim().length() == 0) {
+            //为0则加载默认图片
+            Picasso.with(container.getContext()).load(R.drawable.picasso_error_bg).into(item);
+        }else {
+            Picasso.with(container.getContext()).load(coverUrlLarge).into(item);
+        }
         return itemView;
     }
 

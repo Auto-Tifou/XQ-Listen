@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobapplication.himalaya.R;
+import mobapplication.himalaya.base.BaseApplication;
 
 /**
  * create by Administrator in 2019/12/5 0005
@@ -24,30 +25,30 @@ import mobapplication.himalaya.R;
  * @Description : RecyclerView适配器
  * @Useage :
  **/
-public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdapter.InnerHolder> {
+public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.InnerHolder> {
 
     private static final String TAG = "RecommendListAdapter";
     private List<Album> mData = new ArrayList<>();
-    private OnRecommendItemClickListener mItemClickListner = null;
+    private OnRecommendItemClickListener mItemClickListener = null;
 
     @NonNull
     @Override
-    public RecommendListAdapter.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AlbumListAdapter.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //载入View
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recommend,parent,false);
         return new InnerHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecommendListAdapter.InnerHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull AlbumListAdapter.InnerHolder holder, final int position) {
         //设置数据
         holder.itemView.setTag(position);//所有继承View的类对象都有这个方法,判断位置
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mItemClickListner != null) {
+                if (mItemClickListener != null) {
                     int clickPosition = (int) v.getTag();
-                    mItemClickListner.onItemClick(clickPosition,mData.get(position));
+                    mItemClickListener.onItemClick(clickPosition,mData.get(position));
                 }
                 Log.d(TAG,"holder.item click -->" +v.getTag());
             }
@@ -98,17 +99,22 @@ public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdap
             albumContentCountTv.setText(album.getIncludeTrackCount() + "");
 
 //            Picasso加载图片框架
-            Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumCoverIv);
-
-
+            //加载图片
+            if (album.getCoverUrlLarge().trim().length() == 0) {
+                //为0则加载默认图片
+                Picasso.with(BaseApplication.getAppContext()).load(R.drawable.picasso_error_bg).into(albumCoverIv);
+            }else {
+                Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumCoverIv);
+            }
         }
     }
 
-    public void setOnRecommendItemClickListener(OnRecommendItemClickListener listener){
-        this.mItemClickListner = listener;
+    public void setAlbumItemClickListener(OnRecommendItemClickListener listener){
+        this.mItemClickListener = listener;
     }
 
     public interface OnRecommendItemClickListener {
         void onItemClick(int position, Album album);
     }
+
 }

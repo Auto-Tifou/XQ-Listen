@@ -25,4 +25,16 @@ public interface IAlbumDetailViewCallback {
      * @param album
      */
     void onAlbumLoaded(Album album);
+
+    /**
+     * 加载更多的结果
+     * @param size size>0表示加载成功,否则表示加载失败
+     */
+    void onLoaderMoreFinished(int size);
+
+    /**
+     * 下拉加载更多的结果
+     * @param size size>0表示加载成功,否则表示加载失败
+     */
+    void onRefreshFinished(int size);
 }

@@ -1,26 +1,25 @@
 package mobapplication.himalaya.presenters;
 
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import mobapplication.himalaya.api.XimalayApi;
 import mobapplication.himalaya.interfaces.IRecommendPresenter;
 import mobapplication.himalaya.interfaces.IRecommendViewCallback;
-import mobapplication.himalaya.utils.Constants;
 import mobapplication.himalaya.utils.LogUtil;
 
 public class RecommendPresenter implements IRecommendPresenter {
 
     private static final String TAG = "RecommendPresenter";
 
-    private List<IRecommendViewCallback> mCallback = new ArrayList<>();
+    private List<IRecommendViewCallback> mCallbacks = new ArrayList<>();
+    private List<Album> mCurrentRecommend = null;
+    private List<Album> mRecommendList;
+
 
     private RecommendPresenter(){
 
@@ -42,6 +41,14 @@ public class RecommendPresenter implements IRecommendPresenter {
         return sInstance;
     }
 
+    /**
+     * 获取当前的推荐专辑对象
+     * @return 推荐专辑列表,使用之前要判空
+     */
+    public List<Album> getCurrentRecommend(){
+        return mCurrentRecommend;
+    }
+
 
     /**
      * 获取推荐内容,sdk中的获取猜你喜欢专辑
@@ -49,22 +56,28 @@ public class RecommendPresenter implements IRecommendPresenter {
      */
     @Override
     public void getRecommendList() {
+        //如果内容不空的话，那么直接使用当前的内容
+        if(mRecommendList != null && mRecommendList.size() > 0) {
+            LogUtil.d(TAG,"getRecommendList -- > from list.");
+            handlerRecommendResult(mRecommendList);
+            return;
+        }
         //封装参数
         updateLoading();//发起请求
-        Map<String, String> map = new HashMap<String, String>();
-        //这个参数表示一页数据返回多少条
-        map.put(DTransferConstants.LIKE_COUNT, Constants.COUNT_RECOMMAND +"");
-        CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
+
+        XimalayApi ximalayApi = XimalayApi.getXimalayApi();
+        ximalayApi.getRecommendList(new IDataCallBack<GussLikeAlbumList>() {
             @Override
             public void onSuccess(GussLikeAlbumList gussLikeAlbumList) {
                 //打印当前线程
                 LogUtil.d(TAG,"thread name -->" + Thread.currentThread().getName());
                 //获取数据成功
                 if (gussLikeAlbumList != null) {
-                    List<Album> albumList = gussLikeAlbumList.getAlbumList();
-                    //数据回来,更新UI
+                    LogUtil.d(TAG,"getRecommendList -- > from network..");
+                    mRecommendList = gussLikeAlbumList.getAlbumList();
+                    //数据回来以后，我们要去更新UI
                     //upRecommendUI(albumList);
-                    handlerRecommendResult(albumList);
+                    handlerRecommendResult(mRecommendList);
                 }
             }
 
@@ -79,8 +92,8 @@ public class RecommendPresenter implements IRecommendPresenter {
     }
 
     private void handlerError() {
-        if (mCallback != null) {
-            for (IRecommendViewCallback callback : mCallback) {
+        if (mCallbacks != null) {
+            for (IRecommendViewCallback callback : mCallbacks) {
                 callback.onNetworkError();
             }
         }
@@ -92,34 +105,35 @@ public class RecommendPresenter implements IRecommendPresenter {
 //            测试,清空一下,让界面显示空
 //            albumList.clear();
             if (albumList.size() == 0) {
-                for (IRecommendViewCallback callback : mCallback) {
+                for (IRecommendViewCallback callback : mCallbacks) {
                     callback.onEmpty();
                 }
             }else {
-                for (IRecommendViewCallback callback : mCallback) {
+                for (IRecommendViewCallback callback : mCallbacks) {
                     callback.onRecommendListLoaded(albumList);
                 }
+                this.mCurrentRecommend = albumList;
             }
         }
     }
     private void updateLoading(){
-        for (IRecommendViewCallback callback : mCallback) {
+        for (IRecommendViewCallback callback : mCallbacks) {
             callback.onLoading();
         }
     }
 
     @Override
     public void registerViewCallback(IRecommendViewCallback callback) {
-        if (mCallback != null && !mCallback.contains(callback)) {
-            mCallback.add(callback);
+        if (mCallbacks != null && !mCallbacks.contains(callback)) {
+            mCallbacks.add(callback);
         }
     }
 
 
     @Override
     public void unRegisterViewCallback(IRecommendViewCallback callback) {
-        if (mCallback != null) {
-            mCallback.remove(mCallback);
+        if (mCallbacks != null) {
+            mCallbacks.remove(callback);
         }
     }
 }

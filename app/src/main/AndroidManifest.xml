@@ -27,15 +27,21 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity"/>
-        <activity android:name=".PlayerActivity"/>
+        <activity android:name=".DetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".PlayerActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name="com.ximalaya.ting.android.opensdk.player.service.XmPlayerService"
             android:process=":player"/>
