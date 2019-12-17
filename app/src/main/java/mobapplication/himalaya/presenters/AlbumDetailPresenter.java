@@ -8,7 +8,7 @@ import com.ximalaya.ting.android.opensdk.model.track.TrackList;
 import java.util.ArrayList;
 import java.util.List;
 
-import mobapplication.himalaya.api.XimalayApi;
+import mobapplication.himalaya.data.XimalayApi;
 import mobapplication.himalaya.interfaces.IAlbumDetailPresenter;
 import mobapplication.himalaya.interfaces.IAlbumDetailViewCallback;
 import mobapplication.himalaya.utils.LogUtil;

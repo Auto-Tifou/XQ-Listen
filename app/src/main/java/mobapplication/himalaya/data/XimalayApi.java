@@ -1,4 +1,4 @@
-package mobapplication.himalaya.api;
+package mobapplication.himalaya.data;
 
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;

@@ -48,9 +48,12 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.3.2'
 //    上拉下拉刷新加载
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
+    //rxjava
+    implementation "io.reactivex.rxjava2:rxjava:2.2.14"
 
     implementation files('libs\\TingPhoneOpenSDK_7.0.19.jar')
     implementation files('libs\\XmlyOAuth2SDK_V1.11.jar')
+    implementation 'org.jetbrains:annotations-java5:15.0'
 
 
 }

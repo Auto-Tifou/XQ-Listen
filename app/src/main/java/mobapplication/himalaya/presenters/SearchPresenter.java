@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobapplication.himalaya.SearchActivity;
-import mobapplication.himalaya.api.XimalayApi;
+import mobapplication.himalaya.data.XimalayApi;
 import mobapplication.himalaya.interfaces.ISearchCallback;
 import mobapplication.himalaya.interfaces.ISearchPresenter;
 import mobapplication.himalaya.utils.Constants;

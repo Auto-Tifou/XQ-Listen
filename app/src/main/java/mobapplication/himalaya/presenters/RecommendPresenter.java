@@ -7,7 +7,7 @@ import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 import java.util.ArrayList;
 import java.util.List;
 
-import mobapplication.himalaya.api.XimalayApi;
+import mobapplication.himalaya.data.XimalayApi;
 import mobapplication.himalaya.interfaces.IRecommendPresenter;
 import mobapplication.himalaya.interfaces.IRecommendViewCallback;
 import mobapplication.himalaya.utils.LogUtil;

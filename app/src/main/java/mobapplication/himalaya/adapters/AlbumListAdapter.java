@@ -1,5 +1,6 @@
 package mobapplication.himalaya.adapters;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobapplication.himalaya.R;
-import mobapplication.himalaya.base.BaseApplication;
 
 /**
  * create by Administrator in 2019/12/5 0005
@@ -27,30 +27,30 @@ import mobapplication.himalaya.base.BaseApplication;
  **/
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.InnerHolder> {
 
-    private static final String TAG = "RecommendListAdapter";
+    private static final String TAG = "AlbumListAdapter";
     private List<Album> mData = new ArrayList<>();
     private OnRecommendItemClickListener mItemClickListener = null;
 
     @NonNull
     @Override
-    public AlbumListAdapter.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //载入View
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recommend,parent,false);
+    public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //这里是载View
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recommend, parent, false);
         return new InnerHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AlbumListAdapter.InnerHolder holder, final int position) {
-        //设置数据
-        holder.itemView.setTag(position);//所有继承View的类对象都有这个方法,判断位置
+    public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
+        //这里是设置数据
+        holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mItemClickListener != null) {
                     int clickPosition = (int) v.getTag();
-                    mItemClickListener.onItemClick(clickPosition,mData.get(position));
+                    mItemClickListener.onItemClick(clickPosition, mData.get(clickPosition));
                 }
-                Log.d(TAG,"holder.item click -->" +v.getTag());
+                Log.d(TAG, "holder.itemView click -- > " + v.getTag());
             }
         });
         holder.setData(mData.get(position));
@@ -70,46 +70,44 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
             mData.clear();
             mData.addAll(albumList);
         }
-        //更新UI
+        //更新一下UI。
         notifyDataSetChanged();
     }
 
+
     public class InnerHolder extends RecyclerView.ViewHolder {
-        public InnerHolder(@NonNull View itemView) {
+        public InnerHolder(View itemView) {
             super(itemView);
         }
 
         public void setData(Album album) {
-            //找到这个控件,设置数据
+            //找到各个控件，设置数据
             //专辑封面
             ImageView albumCoverIv = itemView.findViewById(R.id.album_cover);
             //title
             TextView albumTitleTv = itemView.findViewById(R.id.album_title_tv);
             //描述
-            TextView albumDesrcTv = itemView.findViewById(R.id.album_description_tv);
+            TextView albumDesTv = itemView.findViewById(R.id.album_description_tv);
             //播放数量
             TextView albumPlayCountTv = itemView.findViewById(R.id.album_play_count);
             //专辑内容数量
             TextView albumContentCountTv = itemView.findViewById(R.id.album_content_size);
 
-            //获取sdk的数据赋值
             albumTitleTv.setText(album.getAlbumTitle());
-            albumDesrcTv.setText(album.getAlbumIntro());
+            albumDesTv.setText(album.getAlbumIntro());
             albumPlayCountTv.setText(album.getPlayCount() + "");
             albumContentCountTv.setText(album.getIncludeTrackCount() + "");
 
-//            Picasso加载图片框架
-            //加载图片
-            if (album.getCoverUrlLarge().trim().length() == 0) {
-                //为0则加载默认图片
-                Picasso.with(BaseApplication.getAppContext()).load(R.drawable.picasso_error_bg).into(albumCoverIv);
-            }else {
-                Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumCoverIv);
+            String coverUrlLarge = album.getCoverUrlLarge();
+            if (!TextUtils.isEmpty(coverUrlLarge)) {
+                Picasso.with(itemView.getContext()).load(coverUrlLarge).into(albumCoverIv);
+            } else {
+                albumCoverIv.setImageResource(R.drawable.picasso_error_bg);
             }
         }
     }
 
-    public void setAlbumItemClickListener(OnRecommendItemClickListener listener){
+    public void setOnRecommendItemClickListener(OnRecommendItemClickListener listener) {
         this.mItemClickListener = listener;
     }
 

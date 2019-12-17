@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mobapplication.himalaya.api.XimalayApi;
+import mobapplication.himalaya.data.XimalayApi;
 import mobapplication.himalaya.base.BaseApplication;
 import mobapplication.himalaya.interfaces.IPlayerCallback;
 import mobapplication.himalaya.interfaces.IPlayerPresenter;
@@ -397,8 +397,10 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (lastModel != null) {
             LogUtil.d(TAG,"lastModel"+ lastModel.getKind());
         }
+        if(curModel != null) {
+            LogUtil.d(TAG,"curModel..." + curModel.getKind());
+        }
 
-        LogUtil.d(TAG,"curModel" +curModel.getKind());
         //curMode代表的是当前播放的内容
         //通过getKind()来获取它是什么类型的
         //track表示是track类型
@@ -414,6 +416,9 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (curModel instanceof Track) {
             Track currentTrack = (Track) curModel;
             mCurrentTrack = currentTrack;
+            //保存播放记录
+            HistoryPresenter historyPresenter = HistoryPresenter.getHistoryPresenter();
+            historyPresenter.addHistory(currentTrack);
 //            LogUtil.d(TAG,"title ==>"+currentTrack.getTrackTitle());
             //更新标题UI
             for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
