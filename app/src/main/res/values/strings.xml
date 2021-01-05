@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XQ听</string>
+    <string name="app_name">随身听</string>
     
     <string-array name="indicator_title">
         <item>推荐</item>
