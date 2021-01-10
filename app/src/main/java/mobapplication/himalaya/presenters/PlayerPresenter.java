@@ -160,7 +160,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             //保存到sp里面
             SharedPreferences.Editor editor = mPlayModSp.edit();
             editor.putInt(PLAY_MODE_SP_KEY,getIntByPlayMode(mode));
-            editor.commit();
+            editor.apply();
         }
     }
 
